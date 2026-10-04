@@ -1,0 +1,75 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "doccheap-haystack"
+version = "0.1.0"
+description = "A Haystack component for doc.cheap: read passports, ID cards and driver's licences into documents."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Teoh Chin Heng", email = "admin@doc.cheap" }]
+keywords = ["haystack", "converter", "ocr", "passport", "id-card", "mrz", "document-recognition", "kyc", "doc.cheap"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
+dependencies = ["doc-cheap>=0.1.0,<1", "haystack-ai>=2.12,<4", "httpx>=0.27,<1"]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "pytest-cov>=5", "respx>=0.21"]
+dev = ["pytest>=8", "pytest-cov>=5", "respx>=0.21", "ruff>=0.6", "mypy>=1.11"]
+
+[project.urls]
+Homepage = "https://doc.cheap"
+Documentation = "https://doc.cheap/docs"
+Source = "https://gitlab.com/doccheap/doccheap-haystack"
+Changelog = "https://gitlab.com/doccheap/doccheap-haystack/-/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/haystack_integrations"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/haystack_integrations", "tests", "README.md", "CHANGELOG.md", "LICENSE", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+branch = true
+source = ["haystack_integrations.components.converters.doc_cheap"]
+
+[tool.coverage.report]
+fail_under = 100
+show_missing = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["haystack_integrations"]
+known-third-party = ["doc_cheap", "haystack"]
+
+[tool.mypy]
+strict = true
+python_version = "3.10"
+files = ["src", "tests"]
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "src"
